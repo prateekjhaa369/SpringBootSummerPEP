@@ -1,0 +1,5 @@
+1. user Password
+2. validation -- the app should not terminate if validation goes wrong(error should say invalid username)
+username(not blank, not special character)
+password(special character mandatory, atleast one number, min 1 capital letter, min 4, max 16);
+
