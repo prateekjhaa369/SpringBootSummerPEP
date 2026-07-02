@@ -17,6 +17,7 @@ public class Employee {
     @NotBlank(message = "Name cannot be empty")
     @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Only alphabets and spaces are allowed")
+
     private String name;
 
     @Min(value = 18, message = "Age should be at least 18")

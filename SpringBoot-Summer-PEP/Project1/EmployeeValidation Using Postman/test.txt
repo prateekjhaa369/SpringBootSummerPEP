@@ -1,0 +1,61 @@
+Step 4: Testing in Postman
+Create Employee
+
+POST
+
+http://localhost:8080/employee
+
+Body:
+
+{
+    "name":"Rahul Kumar",
+    "age":22,
+    "designation":"Programmer"
+}
+Validation Tests
+Invalid Name
+{
+    "name":"R",
+    "age":22,
+    "designation":"Programmer"
+}
+
+Should fail because the name has fewer than 2 characters.
+
+Invalid Age
+{
+    "name":"Rahul",
+    "age":16,
+    "designation":"Programmer"
+}
+
+Should fail because age is below 18.
+
+Invalid Designation
+{
+    "name":"Rahul",
+    "age":22,
+    "designation":"Doctor"
+}
+
+Should fail with:
+
+Invalid Designation
+Display Employees
+
+GET
+
+http://localhost:8080/employees
+Raise Salary
+
+PUT
+
+http://localhost:8080/raise?name=Rahul Kumar&percentage=10
+
+Salary:
+
+25000
+
+↓
+
+27500

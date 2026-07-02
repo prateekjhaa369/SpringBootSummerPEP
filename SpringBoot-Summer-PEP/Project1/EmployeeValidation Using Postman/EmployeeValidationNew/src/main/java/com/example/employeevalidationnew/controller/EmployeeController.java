@@ -5,6 +5,7 @@ import com.example.employeevalidationnew.repository.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.employeevalidationnew.exception.DesignationNotFound;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class EmployeeController {
             employee.setSalary(20000);
 
         else
-            throw new RuntimeException("Invalid Designation");
+            throw new DesignationNotFound("Invalid Designation");
 
         return repository.save(employee);
     }

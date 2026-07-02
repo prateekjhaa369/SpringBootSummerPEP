@@ -1,0 +1,72 @@
+Step 1: Open the Home Page
+
+Go to:
+
+http://localhost:8080/
+
+You should see:
+
+Employee Management System
+
+Create Employee
+
+Display Employees
+
+Raise Salary
+Step 2: Create an Employee
+
+Click Create Employee.
+
+Enter:
+
+Name: Rahul Kumar
+Age: 22
+Designation: Programmer
+
+Click Save.
+
+You should be redirected to:
+
+http://localhost:8080/display
+Step 3: Display Employees
+
+You should see something like:
+
+Name	Age	Designation	Salary
+Rahul Kumar	22	Programmer	25000
+Step 4: Raise Salary
+
+Go to:
+
+http://localhost:8080/raise
+
+Enter:
+
+Name: Rahul Kumar
+Percentage: 10
+
+Click Raise Salary.
+
+You should return to the display page.
+
+Salary should now be:
+
+27500
+Step 5: Test Another Designation
+
+Create another employee:
+
+Name: Amit
+Age: 30
+Designation: Manager
+
+Salary should automatically become:
+
+30000
+Step 6: Test Display Again
+
+You should now see:
+
+Name	Age	Designation	Salary
+Rahul Kumar	22	Programmer	27500
+Amit	30	Manager	30000
