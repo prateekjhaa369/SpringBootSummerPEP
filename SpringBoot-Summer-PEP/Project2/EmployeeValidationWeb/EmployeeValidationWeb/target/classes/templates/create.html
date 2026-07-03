@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Employee</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<h2>Create Employee</h2>
+
+<form th:action="@{/save}" th:object="${employee}" method="post">
+
+    <label>Name</label><br>
+    <input type="text" th:field="*{name}">
+    <br><br>
+
+    <label>Age</label><br>
+    <input type="number" th:field="*{age}">
+    <br><br>
+
+    <label>Designation</label><br>
+
+    <select th:field="*{designation}">
+        <option value="Programmer">Programmer</option>
+        <option value="Manager">Manager</option>
+        <option value="Tester">Tester</option>
+    </select>
+
+    <br><br>
+
+    <input type="submit" value="Save">
+
+</form>
+
+<br>
+
+<a th:href="@{/}">Home</a>
+
+</body>
+</html>
