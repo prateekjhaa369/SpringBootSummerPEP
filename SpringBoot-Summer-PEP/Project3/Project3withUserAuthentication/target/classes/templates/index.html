@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR | Employee Management System</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --success-hover: #059669;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 40px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .header-section { margin-bottom: 32px; text-align: center; }
+        .header-section h1 { font-size: 32px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .header-section p { color: var(--text-muted); font-size: 16px; }
+
+        /* Navigation Grid Options Panels */
+        .action-menu { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 16px; 
+            margin-bottom: 32px; 
+        }
+        .menu-btn { 
+            display: flex; align-items: center; justify-content: center; text-decoration: none; 
+            padding: 16px 24px; font-size: 16px; font-weight: 600; border-radius: 10px; 
+            color: #475569; background: white; border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s ease;
+        }
+        .menu-btn:hover { background-color: #f1f5f9; color: var(--text-main); transform: translateY(-1px); }
+        .menu-btn.active { 
+            background-color: var(--primary); color: white; border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+        .menu-btn.exit-btn { background-color: #fff1f2; color: #b91c1c; border-color: #fecaca; }
+        .menu-btn.exit-btn:hover { background-color: var(--danger); color: white; border-color: var(--danger); }
+
+        /* Main Content Card Area */
+        .card { background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 32px; }
+        .card-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; color: var(--text-main); border-bottom: 2px solid var(--bg-color); padding-bottom: 10px; }
+
+        /* Registry Table Rendering */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 15px; }
+        th { background-color: #f1f5f9; color: var(--text-muted); font-weight: 600; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        td { padding: 16px; border-bottom: 1px solid var(--border); color: #334155; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f8fafc; }
+        
+        .badge { display: inline-block; padding: 4px 10px; font-size: 12px; font-weight: 600; border-radius: 9999px; }
+        .badge-manager { background: #e0e7ff; color: #4338ca; }
+        .badge-tester { background: #fef3c7; color: #b45309; }
+        .badge-programmer { background: #ecfdf5; color: #047857; }
+
+        /* Structural form input styling */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 24px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 14px; font-weight: 600; color: #334155; }
+        input, select { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; color: var(--text-main); background-color: #fff; outline: none; transition: all 0.15s ease; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .hint-text { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
+        /* Form submissions buttons configuration */
+        .submit-btn { font-size: 15px; font-weight: 600; color: white; background-color: var(--primary); border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: background-color 0.15s ease; }
+        .submit-btn:hover { background-color: var(--primary-hover); }
+        .submit-btn.btn-success { background-color: var(--success); }
+        .submit-btn.btn-success:hover { background-color: var(--success-hover); }
+
+        .alert-error { background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 14px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 24px; font-weight: 500; }
+        .error-msg { color: var(--danger); font-size: 13px; margin-top: 4px; font-weight: 500; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header-section">
+            <h1>CoreHR Dashboard</h1>
+            <p>Logged segment context: <strong style="color: var(--primary);" th:text="${session.loggedInUser}">User</strong></p>
+        </div>
+
+        <!-- RE-ENGINEERED NAVIGATION BAR LINK OPTIONS -->
+        <div class="action-menu">
+            <a th:href="@{/employees(action='create')}" th:classappend="${currentAction == 'create' ? 'active' : ''}" class="menu-btn">
+                Create Employee
+            </a>
+            <a th:href="@{/employees(action='display')}" th:classappend="${currentAction == 'display' ? 'active' : ''}" class="menu-btn">
+                Display Employees
+            </a>
+            <a th:href="@{/employees(action='raise')}" th:classappend="${currentAction == 'raise' ? 'active' : ''}" class="menu-btn">
+                Raise Salary
+            </a>
+            <a th:href="@{/employees/exit}" class="menu-btn exit-btn">
+                Exit System
+            </a>
+        </div>
+
+        <!-- Error Feedback panel handling strings -->
+        <div class="alert-error" th:if="${param.error}" th:text="${param.error}"></div>
+
+        <!-- CONDITIONAL BLOCK CONTENT SWITCHES -->
+        <div class="card">
+            
+            <!-- OPTION 1: ONBOARD EMPLOYEE -->
+            <div th:if="${currentAction == 'create'}">
+                <h3 class="card-title">Onboard New Profile</h3>
+                <p class="hint-text">* Fixed Starting Salaries: Manager = $30k | Tester = $20k | Programmer = $25k</p>
+                
+                <form th:action="@{/employees/create}" th:object="${newEmployee}" method="post">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Employee Full Name</label>
+                            <input type="text" th:field="*{name}" placeholder="Letters only (Max 2 words/spaces)" required />
+                            <span class="error-msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Age (18 - 60)</label>
+                            <input type="number" th:field="*{age}" min="18" max="60" placeholder="Age" required />
+                            <span class="error-msg" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Designation Role</label>
+                            <select th:field="*{designation}" required>
+                                <option value="Manager">Manager</option>
+                                <option value="Tester">Tester</option>
+                                <option value="Programmer">Programmer</option>
+                            </select>
+                            <span class="error-msg" th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Save New Employee</button>
+                </form>
+            </div>
+
+            <!-- OPTION 2: DISPLAY REGISTRY -->
+            <div th:if="${currentAction == 'display'}">
+                <h3 class="card-title">My Tracked Personnel Records</h3>
+                <div th:if="${#lists.isEmpty(employees)}" class="empty-state">
+                    <p>No active employee entries associated with your user key. Use "Create Employee" to populate logs.</p>
+                </div>
+                <div class="table-responsive" th:if="${!#lists.isEmpty(employees)}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Key</th>
+                                <th>Full Name</th>
+                                <th>Age</th>
+                                <th>Designation</th>
+                                <th style="text-align: right;">Current Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="emp : ${employees}">
+                                <td th:text="${'#0' + emp.id}"></td>
+                                <td style="font-weight: 600;" th:text="${emp.name}"></td>
+                                <td th:text="${emp.age}"></td>
+                                <td>
+                                    <span th:classappend="${emp.designation == 'Manager' ? 'badge badge-manager' : (emp.designation == 'Tester' ? 'badge badge-tester' : 'badge badge-programmer')}" 
+                                          th:text="${emp.designation}">
+                                    </span>
+                                </td>
+                                <td style="text-align: right; font-weight: 600; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(emp.salary, 1, 2)}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- OPTION 3: RAISE CORPORATE SALARY -->
+            <div th:if="${currentAction == 'raise'}">
+                <h3 class="card-title">Process Compensation Increment</h3>
+                <form th:action="@{/employees/raise-salary}" method="post">
+                    <div class="form-grid" style="grid-template-columns: 2fr 1fr;">
+                        <div class="form-group">
+                            <label>Target Personnel Profile</label>
+                            <select name="id" required>
+                                <option value="" disabled selected>-- Select target record --</option>
+                                <option th:each="emp : ${employees}" th:value="${emp.id}" th:text="${emp.name + ' (' + emp.designation + ' - $' + emp.salary + ')'}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Increment Weight (1.0% to 10.0%)</label>
+                            <input type="number" name="percentage" step="0.1" min="1" max="10" placeholder="e.g. 5.5%" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn btn-success">Apply Corporate Raise</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

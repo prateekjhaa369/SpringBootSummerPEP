@@ -88,5 +88,12 @@ public class EmployeeController {
 
         return "redirect:/display";
     }
+    // Exit Page
+    @GetMapping("/exit")
+    public String exit() {
+
+        return "thankyou";
+
+    }
 
 }
