@@ -1,0 +1,5 @@
+com\eventmanagement\reportingservice\entity\EventStatistics.class
+com\eventmanagement\reportingservice\repository\EventStatisticsRepository.class
+com\eventmanagement\reportingservice\controller\ReportingController.class
+com\eventmanagement\reportingservice\ReportingServiceApplication.class
+com\eventmanagement\reportingservice\kafka\RegistrationConsumer.class
