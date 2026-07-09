@@ -1,0 +1,5 @@
+com\eventmanagement\registrationservice\RegistrationServiceApplication.class
+com\eventmanagement\registrationservice\repository\RegistrationRepository.class
+com\eventmanagement\registrationservice\entity\Registration.class
+com\eventmanagement\registrationservice\kafka\RegistrationProducer.class
+com\eventmanagement\registrationservice\controller\RegistrationController.class
