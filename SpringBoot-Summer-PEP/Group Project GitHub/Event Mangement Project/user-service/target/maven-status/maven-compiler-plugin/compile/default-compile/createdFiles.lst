@@ -1,0 +1,4 @@
+com\eventmanagement\userservice\repository\UserRepository.class
+com\eventmanagement\userservice\controller\UserController.class
+com\eventmanagement\userservice\entity\User.class
+com\eventmanagement\userservice\UserServiceApplication.class

@@ -1,0 +1,2 @@
+com\eventmanagement\authservice\AuthServiceApplication.class
+com\eventmanagement\authservice\config\SecurityConfig.class

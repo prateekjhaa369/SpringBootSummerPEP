@@ -1,0 +1,4 @@
+com\eventmanagement\eventservice\controller\EventController.class
+com\eventmanagement\eventservice\EventServiceApplication.class
+com\eventmanagement\eventservice\repository\EventRepository.class
+com\eventmanagement\eventservice\entity\Event.class

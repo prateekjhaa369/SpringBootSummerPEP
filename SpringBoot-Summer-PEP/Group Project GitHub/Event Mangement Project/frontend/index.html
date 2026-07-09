@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Events | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-box">🎯</div>
+            <span class="logo-text">Nexus</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-view="dashboard" id="nav-dashboard">
+                <span class="nav-icon">⬛</span><span class="nav-label">Dashboard</span>
+            </a>
+            <a href="#" class="nav-link" data-view="events" id="nav-events">
+                <span class="nav-icon">🗓</span><span class="nav-label">Events</span>
+            </a>
+            <a href="#" class="nav-link" data-view="users" id="nav-users">
+                <span class="nav-icon">👥</span><span class="nav-label">Users</span>
+            </a>
+            <a href="#" class="nav-link" data-view="registrations" id="nav-registrations">
+                <span class="nav-icon">📋</span><span class="nav-label">Registrations</span>
+            </a>
+            <a href="#" class="nav-link" data-view="reports" id="nav-reports">
+                <span class="nav-icon">📊</span><span class="nav-label">Reports</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-chip-avatar" id="chip-avatar">?</div>
+                <div class="user-chip-info">
+                    <span class="user-chip-name" id="chip-name">Loading...</span>
+                    <span class="user-chip-role" id="chip-role">...</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="doLogout()">⏻</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-area">
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div>
+                <h1 class="page-title" id="page-title">Dashboard</h1>
+                <p class="page-sub" id="page-sub">Overview of your event management system</p>
+            </div>
+            <div class="topbar-right">
+                <div class="status-pill" id="api-status">⚪ Checking API...</div>
+            </div>
+        </header>
+
+        <!-- VIEWS -->
+        <div class="views-container">
+
+            <!-- ===== DASHBOARD VIEW ===== -->
+            <section class="view active" id="view-dashboard">
+                <div class="stats-row" id="stats-row">
+                    <div class="stat-card" id="stat-events-card">
+                        <div class="stat-icon" style="background:rgba(124,58,237,0.15);color:#8B5CF6">🗓</div>
+                        <div class="stat-body">
+                            <p class="stat-label">Total Events</p>
+                            <h2 class="stat-val" id="stat-events">—</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="stat-users-card">
+                        <div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#06B6D4">👥</div>
+                        <div class="stat-body">
+                            <p class="stat-label">Total Users</p>
+                            <h2 class="stat-val" id="stat-users">—</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="stat-reg-card">
+                        <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#10B981">📋</div>
+                        <div class="stat-body">
+                            <p class="stat-label">Registrations</p>
+                            <h2 class="stat-val" id="stat-regs">—</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="stat-report-card">
+                        <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#F59E0B">📊</div>
+                        <div class="stat-body">
+                            <p class="stat-label">Events Tracked</p>
+                            <h2 class="stat-val" id="stat-reports">—</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>Recent Events</h3>
+                            <a href="#" class="panel-link" onclick="switchView('events')">View all →</a>
+                        </div>
+                        <div id="recent-events-list" class="recent-list"><div class="loader"></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>Recent Registrations</h3>
+                            <a href="#" class="panel-link" onclick="switchView('registrations')">View all →</a>
+                        </div>
+                        <div id="recent-regs-list" class="recent-list"><div class="loader"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== EVENTS VIEW ===== -->
+            <section class="view" id="view-events">
+                <div class="view-toolbar">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" id="event-search" placeholder="Search events..." oninput="filterEvents()">
+                    </div>
+                    <button class="btn-primary" id="btn-add-event" onclick="openModal('modal-event')">＋ Create Event</button>
+                </div>
+                <div class="events-grid" id="events-grid"><div class="loader"></div></div>
+            </section>
+
+            <!-- ===== USERS VIEW ===== -->
+            <section class="view" id="view-users">
+                <div class="view-toolbar">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" id="user-search" placeholder="Search users..." oninput="filterUsers()">
+                    </div>
+                    <button class="btn-primary" id="btn-add-user" onclick="openModal('modal-user')">＋ Add User</button>
+                </div>
+                <div class="table-wrap panel">
+                    <table class="data-table" id="users-table">
+                        <thead><tr><th>#</th><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+                        <tbody id="users-tbody"><tr><td colspan="5"><div class="loader"></div></td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== REGISTRATIONS VIEW ===== -->
+            <section class="view" id="view-registrations">
+                <div class="view-toolbar">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" id="reg-search" placeholder="Search by event or user ID..." oninput="filterRegs()">
+                    </div>
+                </div>
+                <div class="table-wrap panel">
+                    <table class="data-table" id="regs-table">
+                        <thead><tr><th>#</th><th>Event ID</th><th>User ID</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="regs-tbody"><tr><td colspan="5"><div class="loader"></div></td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== REPORTS VIEW ===== -->
+            <section class="view" id="view-reports">
+                <div class="reports-header">
+                    <p class="text-muted">Statistics are updated in real-time via Kafka whenever a user registers for an event.</p>
+                </div>
+                <div class="table-wrap panel">
+                    <table class="data-table">
+                        <thead><tr><th>Event ID</th><th>Total Registrations</th><th>Progress</th></tr></thead>
+                        <tbody id="reports-tbody"><tr><td colspan="3"><div class="loader"></div></td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Event Modal -->
+<div class="modal-bg hidden" id="modal-event">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h2 id="modal-event-title">Create Event</h2>
+            <button class="close-btn" onclick="closeModal('modal-event')">✕</button>
+        </div>
+        <form id="form-event" class="modal-form" onsubmit="submitEvent(event)">
+            <input type="hidden" id="event-id-hidden">
+            <div class="field-grid">
+                <div class="field full">
+                    <label>Event Title</label>
+                    <input type="text" id="e-title" placeholder="e.g. Tech Conference 2025" required>
+                </div>
+                <div class="field full">
+                    <label>Description</label>
+                    <textarea id="e-desc" placeholder="Describe your event..." required></textarea>
+                </div>
+                <div class="field">
+                    <label>Location</label>
+                    <input type="text" id="e-location" placeholder="City or Online" required>
+                </div>
+                <div class="field">
+                    <label>Date & Time</label>
+                    <input type="datetime-local" id="e-date" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary full-w">Save Event</button>
+        </form>
+    </div>
+</div>
+
+<!-- User Modal -->
+<div class="modal-bg hidden" id="modal-user">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h2 id="modal-user-title">Add User</h2>
+            <button class="close-btn" onclick="closeModal('modal-user')">✕</button>
+        </div>
+        <form id="form-user" class="modal-form" onsubmit="submitUser(event)">
+            <input type="hidden" id="user-id-hidden">
+            <div class="field-grid">
+                <div class="field">
+                    <label>Username</label>
+                    <input type="text" id="u-name" placeholder="johndoe" required>
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="u-email" placeholder="john@example.com" required>
+                </div>
+                <div class="field full">
+                    <label>Role</label>
+                    <select id="u-role">
+                        <option value="PARTICIPANT">Participant</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary full-w">Save User</button>
+        </form>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal-bg hidden" id="modal-register">
+    <div class="modal-box" style="max-width:420px">
+        <div class="modal-head">
+            <h2>Register for Event</h2>
+            <button class="close-btn" onclick="closeModal('modal-register')">✕</button>
+        </div>
+        <div style="padding:8px 0 20px">
+            <p class="text-muted" id="reg-event-info">Registering for event...</p>
+        </div>
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:20px">
+            You will be registered as: <strong id="reg-user-name" style="color:var(--text)">...</strong>
+        </p>
+        <button class="btn-primary full-w" onclick="confirmRegister()">✅ Confirm Registration</button>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
